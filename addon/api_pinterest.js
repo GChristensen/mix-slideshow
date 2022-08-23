@@ -1,4 +1,4 @@
-import {sleep} from "./utils.js";
+import {showNotification, sleep} from "./utils.js";
 
 export class PinterestAPI {
     PINTEREST_URL = "https://www.pinterest.com";
@@ -20,7 +20,7 @@ export class PinterestAPI {
         if (!this.isAuthorized) {
             await this.authorize();
             if (!this.isAuthorized) {
-                cmdAPI.notifyError("The user is not logged in to Pinterest.")
+                showNotification("The user is not logged in to Pinterest.");
                 throw new Error("Pinterest is unauthorized");
             }
         }
@@ -35,17 +35,12 @@ export class PinterestAPI {
         return url.startsWith(this.PINTEREST_URL);
     }
 
-    isPinURL(url) {
-        return url.startsWith(`${this.PINTEREST_URL}/pin/`);
-    }
-
-    get userProfileURL() {
-        if (this.#userName)
-            return `${this.PINTEREST_URL}/${this.#userName}`;
-    }
-
     getBoardURL(board) {
         return this.PINTEREST_URL + board.url;
+    }
+
+    getURL(url) {
+        return this.PINTEREST_URL + url;
     }
 
     async #fetchPinterestJSON(url, params, method) {
@@ -62,12 +57,6 @@ export class PinterestAPI {
                 init.body = params;
         }
 
-        if (method === "post")
-            init.headers = {
-                "X-CSRFToken": await this.#getCSRFToken(url),
-                "Content-Type": "application/x-www-form-urlencoded"
-            };
-
         let json;
         try {
             const response = await fetch(url, init);
@@ -81,18 +70,6 @@ export class PinterestAPI {
         }
 
         return json;
-    }
-
-    async #getCSRFToken(url) {
-        const csrfTokenCookie = await browser.cookies.get({
-            url: url,
-            name: "csrftoken"
-        });
-        return csrfTokenCookie.value;
-    }
-
-    async #postPinterestJSON(url, params) {
-        return this.#fetchPinterestJSON(url, params, "post")
     }
 
     #printError(error) {
@@ -114,6 +91,19 @@ export class PinterestAPI {
             this.#printError(json?.resource_response?.error);
     }
 
+    async #getPages(f) {
+        let items = [], page, bookmark;
+
+        do {
+            [page, bookmark] = await f(bookmark);
+            if (page?.length)
+                items = [...items, ...page];
+        } while (bookmark);
+
+        if (items.length)
+            return items;
+    }
+
     async #getBoardsPage(bookmark) {
         const pinterestOptions = {
             "options": {
@@ -121,7 +111,7 @@ export class PinterestAPI {
                 "page_size": 100,
                 "privacy_filter": "all",
                 "field_set_key": "detailed",
-                "group_by":"mix_public_private",
+                "group_by": "mix_public_private",
                 "no_fetch_context_on_resource": false
             },
             "context": {}
@@ -142,87 +132,40 @@ export class PinterestAPI {
     }
 
     async getBoards() {
-        let boards = [], page, bookmark;
-
-        do {
-            [page, bookmark] = await this.#getBoardsPage(bookmark);
-            if (page?.length)
-                boards = [...boards, ...page];
-        } while (bookmark);
-
-        if (boards.length)
-            return boards;
+        return this.#getPages(this.#getBoardsPage.bind(this));
     }
 
-    async createBoard(name) {
-        const pinterestOptions = {
-            "options": {
-                "name": name,
-                "description": "",
-                "privacy": "public",
-                "no_fetch_context_on_resource": false
-            },
-            "context": {}
-        };
-
-        const params = {
-            source_url: `/${this.#userName}/`,
-            data: JSON.stringify(pinterestOptions)
-        };
-
-        const json = await this.#postPinterestJSON("/resource/BoardResource/create/", params);
-        await sleep(200);
-
-        return this.#handleResponse(json);
-    }
-
-    async createPin(boardId, description, link, imageURL) {
+    async #getPinsPage(boardId, bookmark) {
         const pinterestOptions = {
             "options": {
                 "board_id": boardId,
-                "field_set_key": "create_success",
-                "skip_pin_create_log": true,
-                "description": description,
-                "link": link,
-                "title": "",
-                "image_url": imageURL,
-                "method": "scraped",
-                "scrape_metric": {"source": "www_url_scrape"},
-                "user_mention_tags": [],
-                "no_fetch_context_on_resource": false
-            },
-            "context":{}
-        };
-
-        const params = {
-            source_url: "/pin-builder/",
-            data: JSON.stringify(pinterestOptions)
-        };
-
-        const json = await this.#postPinterestJSON("/resource/PinResource/create/", params);
-        return !!this.#handleResponse(json);
-    }
-
-    async createRepin(boardId, description, link) {
-        link = link.replace(/\/$/, "");
-        const pinID = link.split("/").at(-1);
-
-        const pinterestOptions = {
-            "options": {
-                "description": description,
-                "pin_id": pinID,
-                "title": "",
-                "board_id": boardId,
+                "currentFilter": -1,
+                "field_set_key": "react_grid_pin",
+                "filter_section_pins": false,
+                "sort": "default",
+                "layout": "default",
+                "page_size": 100,
+                "redux_normalize_feed": true,
                 "no_fetch_context_on_resource": false
             }, "context": {}
         };
 
-        const params = {
-            source_url: `/pin/${pinID}/`,
-            data: JSON.stringify(pinterestOptions)
-        };
+        if (bookmark)
+            pinterestOptions.options.bookmarks = [bookmark];
 
-        const json = await this.#postPinterestJSON("/resource/RepinResource/create/", params);
-        return !!this.#handleResponse(json);
+        const params = {data: JSON.stringify(pinterestOptions)};
+        const json = await this.#fetchPinterestJSON("/resource/BoardFeedResource/get/", params);
+
+        if (json?.resource_response?.status === "success")
+            return [json.resource_response.data, json.resource_response.bookmark];
+        else {
+            this.#printError(json?.resource_response?.error);
+            return [null, null];
+        }
+    }
+
+    async getPins(boardId) {
+        const items = await this.#getPages(this.#getPinsPage.bind(this, boardId));
+        return items.filter(pin => pin.type === "pin");
     }
 }

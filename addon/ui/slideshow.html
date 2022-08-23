@@ -8,9 +8,30 @@
 
     <script src="../global.js" type="text/javascript"></script>
     <script src="../lib/jquery.js" type="text/javascript"></script>
+    <script src="../lib/gl-slideshow.js" type="text/javascript"></script>
     <script src="slideshow.js" type="module"></script>
 </head>
 <body>
-
+    <div id="sidebar">
+        <div id="toolbar"><!--
+         --><span id="button-start" title="Start" class="control-button"><img id="icon-start" src="icons/play.svg"/></span>
+            <span id="button-stop" title="Stop" class="control-button"><img id="icon-stop" src="icons/stop.svg"/></span>
+            <span id="button-fullscreen" title="Fullscreen" class="control-button">&#x26F6;</span>
+        </div>
+        <div id="source-selector">
+            <label for="source" id="label-source">Source</label><br>
+            <select id="source">
+                <option value="pinterest-boards" selected>Pinterest</option>
+            </select>
+        </div>
+        <div id="album-selector">
+            <div id="albums">
+            </div>
+        </div>
+    </div>
+    <div id="slideshow-container">
+        <img id="loading-slideshow" src="icons/loading-slideshow.gif"/>
+        <img id="slideshow-image" />
+    </div>
 </body>
 </html>

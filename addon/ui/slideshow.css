@@ -1,0 +1,141 @@
+:root {
+    --grey-10: #f9f9fa;
+    --grey-20: #ededf0;
+    --grey-30: #d7d7db;
+    --grey-40: #b1b1b3;
+    --grey-50: #737373;
+    --grey-60: #4a4a4f;
+    --grey-70: #38383d;
+    --grey-80: #2a2a2e;
+    --grey-90: #0c0c0d;
+
+    --tone-1: var(--grey-10);
+    --tone-2: var(--grey-20);
+    --tone-3: var(--grey-30);
+    --tone-4: var(--grey-40);
+    --tone-5: var(--grey-50);
+    --tone-6: var(--grey-60);
+    --tone-7: var(--grey-70);
+    --tone-8: var(--grey-80);
+    --tone-9: var(--grey-90);
+
+    --in-content-box-background: var(--tone-6);
+    --in-content-box-background-hover: var(--tone-6);
+    --in-content-box-border-color: var(--tone-5);
+
+    --in-content-page-color: var(--tone-3);
+    --in-content-page-background: var(--tone-7);
+
+    box-sizing: border-box;
+}
+
+*, *::before, *::after, *::marker {
+    box-sizing: inherit;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+
+    background-color: var(--in-content-page-background);
+    color: var(--in-content-page-color);
+    border-color: var(--tone-5);
+
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    margin: 0;
+}
+
+#sidebar {
+    height: 100%;
+    padding: 8px;
+    flex: 0 1 auto;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--in-content-box-border-color);
+}
+
+#toolbar {
+    margin: 0 4px;
+    padding-bottom: 4px;
+    font-size: 18pt;
+    border-bottom: 1px solid var(--in-content-box-border-color);
+}
+
+#icon-start, #icon-stop {
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+#icon-stop {
+    width: 22px;
+    height: 22px;
+}
+
+#button-fullscreen {
+    vertical-align: middle;
+}
+
+.control-button {
+    cursor: pointer;
+}
+
+.loading-albums-container {
+    width: 100%;
+    text-align: center;
+}
+
+#label-source {
+    font-size: 10pt;
+}
+
+#album-selector {
+    margin-top: 4px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+#source-selector {
+    flex: 0 1 auto;
+    margin: 4px 4px;
+}
+
+#album-selector {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.album-check-container, .album-check-label {
+    white-space: nowrap;
+}
+
+#slideshow-container {
+    flex: 1 0 auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#slideshow-container:fullscreen, #slideshow-container::backdrop {
+    background-color: var(--in-content-page-background);
+}
+
+#loading-slideshow {
+    display: none;
+}
+
+#slideshow-image {
+    display: none;
+    max-width: 100%;
+    max-height: 100%;
+}
