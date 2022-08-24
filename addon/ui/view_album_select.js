@@ -2,8 +2,8 @@ export class AlbumSelectView {
     onAlbumSelected;
     #containerId;
 
-    constructor(containerId) {
-        this.#containerId = containerId;
+    constructor() {
+        this.#containerId = "#albums";
         const container = $(this.#containerId);
         container.on("change", ".album-check", this.#onAlbumSelected.bind(this));
     }

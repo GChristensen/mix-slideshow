@@ -2,7 +2,7 @@ import {ControllerBase} from "./controller_base.js";
 import {AlbumSelectView} from "./view_album_select.js";
 
 export class AlbumSelectController extends ControllerBase {
-    #albumSelectView = new AlbumSelectView("#albums");
+    #albumSelectView = new AlbumSelectView();
 
     constructor() {
         super();

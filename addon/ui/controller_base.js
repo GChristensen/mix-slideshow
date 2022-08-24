@@ -17,11 +17,11 @@ export class ControllerBase {
         }
     }
 
-    getSelectedAlbums(sourceId) {
-        return settings.get(`${sourceId}-selected-albums`) || [];
+    async getSelectedAlbums(sourceId) {
+        return await settings.get(`${sourceId}-selected-albums`) || [];
     }
 
-    setSelectedAlbums(sourceId, albums) {
+    async setSelectedAlbums(sourceId, albums) {
         return settings.set(`${sourceId}-selected-albums`, albums);
     }
 }

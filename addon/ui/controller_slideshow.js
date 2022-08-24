@@ -5,7 +5,7 @@ import {shuffle} from "../utils.js";
 export class SlideshowController extends ControllerBase {
     onSlideshowFinished;
 
-    #slideshowView = new SlideshowView("#slideshow-container");
+    #slideshowView = new SlideshowView();
     #slideshowInterval;
     #currentImage;
     #models;
@@ -13,11 +13,14 @@ export class SlideshowController extends ControllerBase {
     #delay;
     #repeat;
     #paused;
+    #queuedAdvance;
 
     constructor() {
         super();
 
         this.#slideshowView.onSlideshowClick = this.#onSlideshowClick.bind(this);
+        this.#slideshowView.onAdvanceSlideshow = this.#onAdvanceSlideshow.bind(this);
+        this.#slideshowView.onTransitionFinished = this.#onTransitionFinished.bind(this);
     }
 
     get slideshowRunning() {
@@ -119,9 +122,15 @@ export class SlideshowController extends ControllerBase {
 
     advanceSlideshow(direction) {
         if (this.slideshowRunning) {
-            if (!this.slideshowPaused)
-                this.#resetSlideshowInterval();
-            this.#advanceSlideshow(direction);
+            if (this.#slideshowView.inTransition)
+                this.#queuedAdvance = direction;
+            else {
+                this.#queuedAdvance = undefined;
+
+                if (!this.slideshowPaused)
+                    this.#resetSlideshowInterval();
+                this.#advanceSlideshow(direction);
+            }
         }
     }
 
@@ -137,6 +146,17 @@ export class SlideshowController extends ControllerBase {
         if (this.slideshowRunning) {
             const image = this.#images[this.#currentImage];
             browser.tabs.create({url: image.sourceURL, active: true});
+        }
+    }
+
+    #onAdvanceSlideshow(direction) {
+        this.advanceSlideshow(direction);
+    }
+
+    #onTransitionFinished() {
+        if (this.#queuedAdvance !== undefined) {
+            this.advanceSlideshow(this.#queuedAdvance);
+            this.#queuedAdvance = undefined;
         }
     }
 }

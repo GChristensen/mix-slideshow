@@ -145,6 +145,10 @@ body {
     align-items: center;
 }
 
+#display-slideshow-container {
+    display: none;
+}
+
 .slideshow-image-container {
     display: none;
     overflow: hidden;
@@ -181,4 +185,28 @@ body {
 
 #options-dialog input[type='checkbox'] {
     margin-left: 0;
+}
+
+#left-navigation-button, #right-navigation-button {
+    height: 64px;
+    width: 64px;
+    border-radius: 5px;
+    text-align: center;
+    position: absolute;
+    left: 2px;
+    top: calc(50% - 32px);
+    z-index: 1000;
+    background-color: var(--tone-6);
+    opacity: 50%;
+    cursor: default;
+    display: none;
+}
+
+#right-navigation-button {
+    left: unset;
+    right: 2px;
+}
+
+#icon-left-navigation-button, #icon-right-navigation-button {
+    height: 64px;
 }

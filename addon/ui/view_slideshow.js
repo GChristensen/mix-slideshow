@@ -1,19 +1,72 @@
+
+const NAVIGATION_FADE_MS = 500;
+const CROSSFADE_DURATION_MS = 1000;
+const NAVIGATION_TIMEOUT_MS = 2000;
+
 export class SlideshowView {
     onSlideshowClick;
+    onAdvanceSlideshow;
+    onTransitionFinished;
 
-    #containerId;
     #displayCounter;
+    #slideshowRunning;
+    #navigationDisplayed;
+    #navigationTimeout;
     #options;
+    #inTransition;
 
-    constructor(containerId) {
-        this.#containerId = containerId;
+    constructor() {
+        const container = $("#slideshow-container");
+        const leftNavigationButton = $("#left-navigation-button");
+        const rightNavigationButton = $("#right-navigation-button");
 
-        $("#slideshow-container").on("click", this.#onSlideshowClick.bind(this));
+        container.on("click", this.#onSlideshowClick.bind(this));
+        container.on("mousemove", this.#onSlideshowMouseMove.bind(this));
+
+        leftNavigationButton.on("click", e => this.#onAdvanceSlideshow(e, false));
+        rightNavigationButton.on("click", e => this.#onAdvanceSlideshow(e, true));
+        leftNavigationButton.on("mousemove", e => e.stopPropagation());
+        rightNavigationButton.on("mousemove", e => e.stopPropagation());
+        leftNavigationButton.on("mouseenter", this.#onNavigationMouseEnter.bind(this));
+        rightNavigationButton.on("mouseenter", this.#onNavigationMouseEnter.bind(this));
+    }
+
+    get inTransition() {
+        return this.#inTransition;
     }
 
     #onSlideshowClick(e) {
         if (this.onSlideshowClick)
             this.onSlideshowClick(e);
+    }
+
+    #onSlideshowMouseMove(e) {
+        if (this.#slideshowRunning && !this.#navigationDisplayed) {
+            this.#navigationDisplayed = true;
+            $("#left-navigation-button").fadeIn(NAVIGATION_FADE_MS);
+            $("#right-navigation-button").fadeIn(NAVIGATION_FADE_MS);
+
+            this.#navigationTimeout = setTimeout(this.#hideNavigation.bind(this), NAVIGATION_TIMEOUT_MS);
+        }
+        else if (this.#navigationDisplayed) {
+            clearTimeout(this.#navigationTimeout);
+            this.#navigationTimeout = setTimeout(this.#hideNavigation.bind(this), NAVIGATION_TIMEOUT_MS);
+        }
+    }
+
+    #onNavigationMouseEnter() {
+        clearTimeout(this.#navigationTimeout);
+    }
+
+    #onAdvanceSlideshow(e, direction) {
+        e.stopPropagation();
+        this.onAdvanceSlideshow(direction);
+    }
+
+    #hideNavigation() {
+        this.#navigationDisplayed = false;
+        $("#left-navigation-button").fadeOut(NAVIGATION_FADE_MS);
+        $("#right-navigation-button").fadeOut(NAVIGATION_FADE_MS);
     }
 
     displayLoading() {
@@ -24,6 +77,7 @@ export class SlideshowView {
     prepareSlideshow(options) {
         this.#options = options;
         this.#displayCounter = 0;
+        this.#slideshowRunning = true;
 
         const objectFit = options.stretch? "contain": "scale-down";
         $("img[id^='slideshow-image']").css("object-fit", objectFit);
@@ -34,6 +88,8 @@ export class SlideshowView {
     }
 
     finishSlideshow() {
+        this.#slideshowRunning = false;
+
         $("#display-slideshow-container").hide();
         $("#slideshow-image-container").hide();
         $("img[id^='slideshow-image']").prop("src", "");
@@ -71,10 +127,16 @@ export class SlideshowView {
             console.error(e);
         }
 
+        this.#inTransition = true;
         currentImage.css("z-index", "100");
         previousImage.css("z-index", "99");
-        currentImage.fadeIn(1000);
-        previousImage.fadeOut(1000);
+
+        previousImage.fadeOut(CROSSFADE_DURATION_MS);
+        currentImage.fadeIn(CROSSFADE_DURATION_MS, () => {
+            this.#inTransition = false;
+            if (this.onTransitionFinished)
+                this.onTransitionFinished();
+        });
     }
 
     async #loadImage(imageId, imageURL) {
