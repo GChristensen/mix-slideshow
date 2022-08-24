@@ -3,10 +3,10 @@ import {SlideshowView} from "./view_slideshow.js";
 import {shuffle} from "../utils.js";
 
 export class SlideshowController extends ControllerBase {
-    #models = {};
     #slideshowView = new SlideshowView("#slideshow-container");
     #slideshowInterval;
     #currentImage;
+    #models;
     #images;
     #delay;
     #paused;
@@ -15,12 +15,6 @@ export class SlideshowController extends ControllerBase {
         super();
 
         this.#slideshowView.onSlideshowClick = this.#onSlideshowClick.bind(this);
-    }
-
-    async init() {
-        for (const source of this._sources) {
-            this.#models[source] = await this.createModel(source);
-        }
     }
 
     get slideshowRunning() {
@@ -32,12 +26,22 @@ export class SlideshowController extends ControllerBase {
     }
 
     async #collectImages() {
+        if (!this.#models)
+            await this.#createModels();
+
         this.#images = [];
 
         for (const [sourceId, model] of Object.entries(this.#models)) {
             const selectedAlbums = await this.getSelectedAlbums(sourceId);
             this.#images = [...this.#images, ...await model.getImages(selectedAlbums)];
         }
+    }
+
+    async #createModels() {
+        this.#models = [];
+
+        for (const source of this._sources)
+            this.#models[source] = await this.createModel(source);
     }
 
     async startSlideshow(delay) {
@@ -106,6 +110,14 @@ export class SlideshowController extends ControllerBase {
             if (!this.slideshowPaused)
                 this.#resetSlideshowInterval();
         }
+    }
+
+    showNextImage() {
+        this.advanceSlideshow(true);
+    }
+
+    showPreviousImage() {
+        this.advanceSlideshow(false);
     }
 
     #onSlideshowClick() {

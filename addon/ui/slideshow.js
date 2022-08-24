@@ -17,7 +17,6 @@ async function init() {
     document.addEventListener('keydown', onKeyDown, false);
 
     albumSelectController.listAlbums();
-    slideshowController.init();
 }
 
 async function startSlideshow() {
@@ -52,11 +51,11 @@ function onKeyDown(event) {
     switch(keyCode) {
         case "ArrowRight":
         case "Space":
-            slideshowController.advanceSlideshow(true);
+            slideshowController.showNextImage();
             break;
 
         case "ArrowLeft":
-            slideshowController.advanceSlideshow(false);
+            slideshowController.showPreviousImage();
             break;
 
         case "Escape":
