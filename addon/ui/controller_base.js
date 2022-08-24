@@ -1,4 +1,4 @@
-import {PinterestModel} from "../model_pinterest.js";
+import {PinterestModel} from "./model_pinterest.js";
 import {settings} from "../settings.js";
 
 export class ControllerBase {

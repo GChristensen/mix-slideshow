@@ -1,4 +1,4 @@
-import {PinterestAPI} from "./api_pinterest.js";
+import {PinterestAPI} from "../api_pinterest.js";
 
 export class PinterestModel {
     #pinterestAPI;

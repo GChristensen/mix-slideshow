@@ -3,12 +3,15 @@ import {SlideshowView} from "./view_slideshow.js";
 import {shuffle} from "../utils.js";
 
 export class SlideshowController extends ControllerBase {
+    onSlideshowFinished;
+
     #slideshowView = new SlideshowView("#slideshow-container");
     #slideshowInterval;
     #currentImage;
     #models;
     #images;
     #delay;
+    #repeat;
     #paused;
 
     constructor() {
@@ -44,17 +47,20 @@ export class SlideshowController extends ControllerBase {
             this.#models[source] = await this.createModel(source);
     }
 
-    async startSlideshow(delay) {
+    async startSlideshow(options) {
         this.#slideshowView.displayLoading();
         await this.#collectImages();
 
         if (this.#images.length) {
-            this.#delay = delay;
+            this.#delay = options.delay * 1000;
+            this.#repeat = options.repeat;
             this.#paused = false;
             this.#currentImage = -1;
-            this.#images = shuffle(this.#images);
 
-            this.#slideshowView.prepareSlideshow();
+            if (options.shuffle)
+                this.#images = shuffle(this.#images);
+
+            this.#slideshowView.prepareSlideshow(options);
             this.#resetSlideshowInterval();
             this.#advanceSlideshow();
         }
@@ -72,8 +78,15 @@ export class SlideshowController extends ControllerBase {
     #advanceSlideshow(direction = true) {
         this.#currentImage += direction? 1: -1;
 
-        if (this.#currentImage >= this.#images.length)
-            this.#currentImage = 0;
+        if (this.#currentImage >= this.#images.length) {
+            if (this.#repeat)
+                this.#currentImage = 0;
+            else {
+                this.stopSlideshow();
+                if (this.onSlideshowFinished)
+                    this.onSlideshowFinished();
+            }
+        }
 
         if (this.#currentImage < 0)
             this.#currentImage = this.#images.length - 1;
@@ -100,15 +113,15 @@ export class SlideshowController extends ControllerBase {
         this.#paused = false;
     }
 
-    toggleFullscreen() {
+    requestFullscreen() {
         this.#slideshowView.requestFullscreen();
     }
 
     advanceSlideshow(direction) {
         if (this.slideshowRunning) {
-            this.#advanceSlideshow(direction);
             if (!this.slideshowPaused)
                 this.#resetSlideshowInterval();
+            this.#advanceSlideshow(direction);
         }
     }
 

@@ -3,6 +3,7 @@ export class SlideshowView {
 
     #containerId;
     #displayCounter;
+    #options;
 
     constructor(containerId) {
         this.#containerId = containerId;
@@ -20,16 +21,21 @@ export class SlideshowView {
         $("#loading-slideshow-container").css("display", "flex");
     }
 
-    prepareSlideshow() {
+    prepareSlideshow(options) {
+        this.#options = options;
+        this.#displayCounter = 0;
+
+        const objectFit = options.stretch? "contain": "scale-down";
+        $("img[id^='slideshow-image']").css("object-fit", objectFit);
+
         $("#loading-slideshow-container").hide();
         $("#display-slideshow-container").show();
         $("#slideshow-container").css("cursor", "pointer");
-
-        this.#displayCounter = 0;
     }
 
     finishSlideshow() {
         $("#display-slideshow-container").hide();
+        $("#slideshow-image-container").hide();
         $("img[id^='slideshow-image']").prop("src", "");
         $("#slideshow-container").css("cursor", "default");
     }
@@ -39,8 +45,10 @@ export class SlideshowView {
     }
 
     async renderImage(imageURL) {
-        //this.#renderImagePlain(imageURL);
-        return this.#renderImageCrossfading(imageURL);
+        if (this.#options.crossfade)
+            return this.#renderImageCrossfading(imageURL);
+        else
+            return this.#renderImagePlain(imageURL);
     }
 
     #renderImagePlain(imageURL) {

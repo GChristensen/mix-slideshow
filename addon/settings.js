@@ -5,6 +5,11 @@ const SETTINGS_KEY = "settings";
 class Settings {
     constructor() {
         this._default = {
+            delay: 7,
+            shuffle: true,
+            repeat: true,
+            crossfade: true,
+            stretch: false
         };
 
         this._bin = {};
@@ -59,7 +64,7 @@ class Settings {
         else if (key === "set")
             return this._set;
 
-        return val => {
+        return (val, save = true) => {
             let bin = this._bin;
 
             if (val === undefined)
@@ -74,7 +79,10 @@ class Settings {
                 bin[key] = val;
 
             let result = key in bin? bin[key]: deleted;
-            return this._save().then(() => result);
+            if (save)
+                return this._save().then(() => result);
+            else
+                return result;
         }
     }
 
