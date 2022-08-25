@@ -1,6 +1,9 @@
 import {PinterestAPI} from "../api_pinterest.js";
+import {sleep} from "../utils.js";
 
 export class PinterestModel {
+    static ID = "pinterest-boards";
+
     #pinterestAPI;
 
     constructor() {
@@ -8,6 +11,23 @@ export class PinterestModel {
             this.#pinterestAPI = pinterestAPI;
             return this;
         });
+    }
+
+    get name() {
+        return "Pinterest";
+    }
+
+    get authorizationURL() {
+        return "https://pinterest.com";
+    }
+
+    get isAuthorized() {
+        return this.#pinterestAPI.isAuthorized;
+    }
+
+    async authorize() {
+        if (!this.#pinterestAPI.isAuthorized)
+            await browser.tabs.create({url: this.authorizationURL, active: true});
     }
 
     async getAlbums() {

@@ -49,6 +49,10 @@ body {
     margin: 0;
 }
 
+a, a:visited, a:active {
+    color: #00dbff;
+}
+
 #sidebar {
     height: 100%;
     padding: 8px;
@@ -96,7 +100,7 @@ body {
     text-align: center;
 }
 
-#label-source {
+#label-source, #source-authorization {
     font-size: 10pt;
 }
 

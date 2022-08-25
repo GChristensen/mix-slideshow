@@ -3,30 +3,41 @@ import {AlbumSelectView} from "./view_album_select.js";
 
 export class AlbumSelectController extends ControllerBase {
     #albumSelectView = new AlbumSelectView();
+    #sourceId;
+    #model;
 
     constructor() {
         super();
 
         this.#albumSelectView.onAlbumSelected = this.#onAlbumSelected.bind(this);
+        this.#albumSelectView.onSourceAuthorization = this.#onSourceAuthorization.bind(this);
         this.#albumSelectView.displayLoading();
     }
 
     async listAlbums() {
-        const sourceId = this.getSelectedSource();
-        const model = await this.createModel(sourceId);
-        const sourceAlbums = await model.getAlbums() || [];
-        const selectedAlbums = await this.getSelectedAlbums(sourceId);
+        const sourceId = this.#albumSelectView.getSelectedSource();
 
-        this.#albumSelectView.render(sourceAlbums, selectedAlbums);
+        if (this.#sourceId !== sourceId) {
+            this.#sourceId = sourceId
+            this.#model = await this.createModel(this.#sourceId);
+        }
+
+        if (this.#model.isAuthorized) {
+            const sourceAlbums = await this.#model.getAlbums() || [];
+            const selectedAlbums = await this.getSelectedAlbums(sourceId);
+
+            this.#albumSelectView.renderAlbums(sourceAlbums, selectedAlbums);
+        }
+        else
+            this.#albumSelectView.renderAuthorizationLink(this.#model.name, "#");
     }
 
     async #onAlbumSelected(selectedAlbums) {
-        const sourceId = this.getSelectedSource();
-        this.setSelectedAlbums(sourceId, selectedAlbums);
+        return this.setSelectedAlbums(this.#sourceId, selectedAlbums);
     }
 
-    getSelectedSource() {
-        const sourceSelect = $("#source");
-        return sourceSelect.val();
+    async #onSourceAuthorization() {
+        await this.#model.authorize();
+        return this.listAlbums();
     }
 }

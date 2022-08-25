@@ -17,13 +17,8 @@ export class PinterestAPI {
     }
 
     async checkAuthorization() {
-        if (!this.isAuthorized) {
+        if (!this.isAuthorized)
             await this.authorize();
-            if (!this.isAuthorized) {
-                showNotification("The user is not logged in to Pinterest.");
-                throw new Error("Pinterest is unauthorized");
-            }
-        }
         return this.isAuthorized;
     }
 

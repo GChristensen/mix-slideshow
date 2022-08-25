@@ -2,17 +2,15 @@ import {PinterestModel} from "./model_pinterest.js";
 import {settings} from "../settings.js";
 
 export class ControllerBase {
-    PINTEREST_BOARDS = "pinterest-boards";
-
     _sources;
 
     constructor() {
-        this._sources = [this.PINTEREST_BOARDS];
+        this._sources = [PinterestModel.ID];
     }
 
     async createModel(sourceId) {
         switch (sourceId) {
-            case this.PINTEREST_BOARDS:
+            case PinterestModel.ID:
                 return new PinterestModel();
         }
     }

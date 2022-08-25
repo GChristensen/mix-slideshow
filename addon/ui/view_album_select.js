@@ -1,11 +1,17 @@
 export class AlbumSelectView {
     onAlbumSelected;
+    onSourceAuthorization;
     #containerId;
 
     constructor() {
         this.#containerId = "#albums";
         const container = $(this.#containerId);
         container.on("change", ".album-check", this.#onAlbumSelected.bind(this));
+    }
+
+    getSelectedSource() {
+        const sourceSelect = $("#source");
+        return sourceSelect.val();
     }
 
     displayLoading() {
@@ -20,7 +26,20 @@ export class AlbumSelectView {
         `);
     }
 
-    render(albums, selectedAlbums) {
+    renderAuthorizationLink(name, href) {
+        const container = $(this.#containerId);
+        const html = `<a id="source-authorization" href="${href}">Authorize in ${name}</a>`;
+
+        container.empty();
+        const link = $(html).appendTo(container);
+        link.on("click", e => {
+            e.preventDefault();
+            if (this.onSourceAuthorization)
+                this.onSourceAuthorization();
+        })
+    }
+
+    renderAlbums(albums, selectedAlbums) {
         const container = $(this.#containerId);
 
         container.empty();
