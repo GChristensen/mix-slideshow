@@ -1,5 +1,7 @@
 import {ControllerBase} from "./controller_base.js";
 import {AlbumSelectView} from "./view_album_select.js";
+import {ModelBase} from "./model_base.js";
+import {showNotification} from "../utils.js";
 
 export class AlbumSelectController extends ControllerBase {
     #albumSelectView = new AlbumSelectView();
@@ -19,11 +21,25 @@ export class AlbumSelectController extends ControllerBase {
 
         if (this.#sourceId !== sourceId) {
             this.#sourceId = sourceId
-            this.#model = await this.createModel(this.#sourceId);
+
+            try {
+                this.#model = await this.createModel(this.#sourceId);
+            } catch (e) {
+                showNotification("Error accessing resource.");
+                throw e;
+            }
         }
 
         if (this.#model.isAuthorized) {
-            const sourceAlbums = await this.#model.getAlbums() || [];
+            let sourceAlbums;
+
+            try {
+                sourceAlbums = await this.#model.getAlbums() || [];
+            } catch (e) {
+                showNotification("Error obtaining album list.");
+                throw e;
+            }
+
             const selectedAlbums = await this.getSelectedAlbums(sourceId);
 
             this.#albumSelectView.renderAlbums(sourceAlbums, selectedAlbums);

@@ -45,7 +45,8 @@ export class PinterestModel extends ModelBase {
             result = result.map(b => ({
                 id: b.id,
                 name: b.name,
-                modified: new Date(b.board_order_modified_at).getTime()}));
+                modified: new Date(b.board_order_modified_at).getTime()
+            }));
         }
 
         return result;

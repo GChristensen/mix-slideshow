@@ -1,4 +1,4 @@
-import {showNotification, sleep} from "./utils.js";
+import {ModelBase} from "./ui/model_base.js";
 
 export class PinterestAPI {
     PINTEREST_URL = "https://www.pinterest.com";
@@ -11,7 +11,7 @@ export class PinterestAPI {
 
     async authorize() {
         const json = await this.#fetchPinterestJSON("/resource/UserSettingsResource/get/");
-        const userDetails = this.#handleResponse(json);
+        const [userDetails] = this.#handleResponse(json);
         if (userDetails)
             this.#userName = userDetails.username;
     }
@@ -24,14 +24,6 @@ export class PinterestAPI {
 
     get isAuthorized() {
         return !!this.#userName;
-    }
-
-    isPinterestURL(url) {
-        return url.startsWith(this.PINTEREST_URL);
-    }
-
-    getBoardURL(board) {
-        return this.PINTEREST_URL + board.url;
     }
 
     getURL(url) {
@@ -81,9 +73,14 @@ export class PinterestAPI {
         const success = json?.resource_response?.status === "success";
 
         if (success)
-            return json.resource_response.data;
-        else
+            return [json.resource_response.data, json.resource_response.bookmark];
+        else {
             this.#printError(json?.resource_response?.error);
+
+            const error = new Error("Error accessing Pinterest.");
+            error.name = ModelBase.MODEL_ERROR;
+            throw error;
+        }
     }
 
     async #getPages(f) {
@@ -118,12 +115,7 @@ export class PinterestAPI {
         const params = {data: JSON.stringify(pinterestOptions)};
         const json = await this.#fetchPinterestJSON("/resource/BoardsResource/get/", params);
 
-        if (json?.resource_response?.status === "success")
-            return [json.resource_response.data, json.resource_response.bookmark];
-        else {
-            this.#printError(json?.resource_response?.error);
-            return [null, null];
-        }
+        return this.#handleResponse(json);
     }
 
     async getBoards() {
@@ -151,12 +143,7 @@ export class PinterestAPI {
         const params = {data: JSON.stringify(pinterestOptions)};
         const json = await this.#fetchPinterestJSON("/resource/BoardFeedResource/get/", params);
 
-        if (json?.resource_response?.status === "success")
-            return [json.resource_response.data, json.resource_response.bookmark];
-        else {
-            this.#printError(json?.resource_response?.error);
-            return [null, null];
-        }
+        return this.#handleResponse(json);
     }
 
     async getPins(boardId) {

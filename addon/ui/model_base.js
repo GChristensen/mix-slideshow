@@ -1,6 +1,9 @@
 import {settings} from "../settings.js";
+import {showNotification} from "../utils.js";
 
 export class ModelBase {
+    static MODEL_ERROR = "EMixSlideshowModelError";
+
     #getCachedAlbumID(album) {
         return `cached-album-${this.modelID}-${album.id}`;
     }
@@ -38,7 +41,15 @@ export class ModelBase {
                     if (cachedImages)
                         images = [...images, ...cachedImages];
                     else {
-                        const onlineImages = await this._getAlbumImages(albumId);
+                        let onlineImages;
+
+                        try {
+                            onlineImages = await this._getAlbumImages(albumId);
+                        } catch (e) {
+                            showNotification("Error obtaining album images.");
+                            throw e;
+                        }
+
                         await this._cacheAlbumImages(album, onlineImages);
                         images = [...images, ...onlineImages];
                     }
