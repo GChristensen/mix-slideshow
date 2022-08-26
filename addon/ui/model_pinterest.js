@@ -1,12 +1,14 @@
 import {PinterestAPI} from "../api_pinterest.js";
-import {sleep} from "../utils.js";
+import {ModelBase} from "./model_base.js";
 
-export class PinterestModel {
+export class PinterestModel extends ModelBase {
     static ID = "pinterest-boards";
 
     #pinterestAPI;
 
     constructor() {
+        super();
+
         return new PinterestAPI().then(pinterestAPI => {
             this.#pinterestAPI = pinterestAPI;
             return this;
@@ -15,6 +17,10 @@ export class PinterestModel {
 
     get name() {
         return "Pinterest";
+    }
+
+    get modelID() {
+        return PinterestModel.ID;
     }
 
     get authorizationURL() {
@@ -35,27 +41,22 @@ export class PinterestModel {
 
         if (this.#pinterestAPI.isAuthorized) {
             result = await this.#pinterestAPI.getBoards();
-            result = result.map(b => ({id: b.id, name: b.name}));
+
+            result = result.map(b => ({
+                id: b.id,
+                name: b.name,
+                modified: new Date(b.board_order_modified_at).getTime()}));
         }
 
         return result;
     }
 
-    async getImages(albums) {
-        let images = [];
+    async _getAlbumImages(albumId) {
+        let boardPins = await this.#pinterestAPI.getPins(albumId);
 
-        for (const album of albums) {
-            try {
-                let boardPins = await this.#pinterestAPI.getPins(album);
-                images = [...images, ...boardPins.map(pin => ({
-                    url: pin.images?.orig?.url,
-                    sourceURL: this.#pinterestAPI.getURL(`/pin/${pin.id}`)
-                }))];
-            } catch (e) {
-                console.error(e);
-            }
-        }
-
-        return images;
+        return boardPins.map(pin => ({
+            url: pin.images?.orig?.url,
+            sourceURL: this.#pinterestAPI.getURL(`/pin/${pin.id}`)
+        }));
     }
 }
