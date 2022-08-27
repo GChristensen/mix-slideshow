@@ -1,4 +1,5 @@
 export class AlbumSelectView {
+    onSourceChanged;
     onAlbumSelected;
     onSourceAuthorization;
     #containerId;
@@ -7,6 +8,8 @@ export class AlbumSelectView {
         this.#containerId = "#albums";
         const container = $(this.#containerId);
         container.on("change", ".album-check", this.#onAlbumSelected.bind(this));
+
+        $("#source-selector").on("change", this.#onSourceChanged.bind(this));
     }
 
     getSelectedSource() {
@@ -28,7 +31,7 @@ export class AlbumSelectView {
 
     renderAuthorizationLink(name, href) {
         const container = $(this.#containerId);
-        const html = `<a id="source-authorization" href="${href}">Authorize in ${name}</a>`;
+        const html = `<a id="source-authorization" href="${href}">Authorize</a>`;
 
         container.empty();
         const link = $(html).appendTo(container);
@@ -75,6 +78,11 @@ export class AlbumSelectView {
 
             $(albumCheck).appendTo(container);
         }
+    }
+
+    #onSourceChanged(e) {
+        if (this.onSourceChanged)
+            this.onSourceChanged(e.target.value);
     }
 
     #onAlbumSelected(e) {

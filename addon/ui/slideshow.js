@@ -3,14 +3,16 @@ import {AlbumSelectController} from "./controller_album_select.js";
 import {SlideshowController} from "./controller_slideshow.js";
 import {OptionsDialog} from "./dialog_options.js";
 
-const albumSelectController = new AlbumSelectController();
-const slideshowController = new SlideshowController();
-const optionsDialog = new OptionsDialog();
+let albumSelectController;
+let slideshowController;
 
 $(init);
 
 async function init() {
     await settings.load();
+
+    albumSelectController = new AlbumSelectController();
+    slideshowController = new SlideshowController();
 
     $("#button-start").on("click", startSlideshow);
     $("#button-stop").on("click", stopSlideshow);
@@ -63,7 +65,7 @@ function requestFullscreen() {
 }
 
 function showOptions() {
-    optionsDialog.show();
+    new OptionsDialog().show();
 }
 
 async function onKeyDown(event) {

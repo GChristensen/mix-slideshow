@@ -1,6 +1,5 @@
 import {ControllerBase} from "./controller_base.js";
 import {AlbumSelectView} from "./view_album_select.js";
-import {ModelBase} from "./model_base.js";
 import {showNotification} from "../utils.js";
 
 export class AlbumSelectController extends ControllerBase {
@@ -11,6 +10,7 @@ export class AlbumSelectController extends ControllerBase {
     constructor() {
         super();
 
+        this.#albumSelectView.onSourceChanged = this.#onSourceChanged.bind(this);
         this.#albumSelectView.onAlbumSelected = this.#onAlbumSelected.bind(this);
         this.#albumSelectView.onSourceAuthorization = this.#onSourceAuthorization.bind(this);
         this.#albumSelectView.displayLoading();
@@ -18,6 +18,8 @@ export class AlbumSelectController extends ControllerBase {
 
     async listAlbums() {
         const sourceId = this.#albumSelectView.getSelectedSource();
+
+        this.#albumSelectView.displayLoading();
 
         if (this.#sourceId !== sourceId) {
             this.#sourceId = sourceId
@@ -46,6 +48,10 @@ export class AlbumSelectController extends ControllerBase {
         }
         else
             this.#albumSelectView.renderAuthorizationLink(this.#model.name, "#");
+    }
+
+    async #onSourceChanged() {
+        return this.listAlbums();
     }
 
     async #onAlbumSelected(selectedAlbums) {

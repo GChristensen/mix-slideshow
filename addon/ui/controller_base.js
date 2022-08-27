@@ -1,5 +1,6 @@
-import {PinterestModel} from "./model_pinterest.js";
 import {settings} from "../settings.js";
+import {PinterestModel} from "./model_pinterest.js";
+import {GooglePhotosModel} from "./model_google_photos.js";
 
 export class ControllerBase {
     _sources;
@@ -12,6 +13,8 @@ export class ControllerBase {
         switch (sourceId) {
             case PinterestModel.ID:
                 return new PinterestModel();
+            case GooglePhotosModel.ID:
+                return new GooglePhotosModel();
         }
     }
 
