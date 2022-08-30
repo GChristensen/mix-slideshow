@@ -1,30 +1,29 @@
 import {ModelBase} from "./model_base.js";
-import {settings} from "../settings.js";
-import {PKCE} from "../lib/PKCE.js";
+import {settings} from "../../settings.js";
+import {PKCE} from "../../lib/PKCE.js";
 
-export class GooglePhotosModel extends ModelBase {
-    static ID = "google-photos";
+export class OneDriveModel extends ModelBase {
+    static ID = "onedrive-pictures";
 
     #pkce = new PKCE({
-        client_id: "",
-        client_secret: "",
-        redirect_uri: "https://gchristensen.github.io/mix-slideshow",
-        authorization_endpoint: "https://accounts.google.com/o/oauth2/v2/auth",
-        token_endpoint: "https://oauth2.googleapis.com/token",
-        requested_scopes: "https://www.googleapis.com/auth/photoslibrary.readonly",
+        client_id: "19162fe8-6fe2-4272-af24-650656701ae0",
+        redirect_uri: 'https://gchristensen.github.io/scrapyard',
+        authorization_endpoint: 'https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize',
+        token_endpoint: 'https://login.microsoftonline.com/consumers/oauth2/v2.0/token',
+        requested_scopes: 'offline_access User.Read Files.ReadWrite Files.ReadWrite.All',
     });
     #accessToken;
 
     get name() {
-        return "Google Photos";
+        return "OneDrive Pictures";
     }
 
     get modelID() {
-        return GooglePhotosModel.ID;
+        return OneDriveModel.ID;
     }
 
     get isAuthorized() {
-        return settings.google_photos_refresh_token();
+        return settings.onedrive_refresh_token();
     }
 
     async authorize() {
@@ -88,8 +87,6 @@ export class GooglePhotosModel extends ModelBase {
         return albums;
     }
 
-    // since Google Photos use base-URLs which are valid only for 60 minutes
-    // it is impractical to use this service with the current slideshow caching scheme
     async _getAlbumImages(albumId) {
         return [];
     }

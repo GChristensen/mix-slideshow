@@ -1,4 +1,4 @@
-import {ModelBase} from "./ui/model_base.js";
+import {ModelBase} from "./model_base.js";
 
 export class PinterestAPI {
     PINTEREST_URL = "https://www.pinterest.com";

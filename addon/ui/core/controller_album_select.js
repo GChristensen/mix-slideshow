@@ -1,6 +1,6 @@
 import {ControllerBase} from "./controller_base.js";
 import {AlbumSelectView} from "./view_album_select.js";
-import {showNotification} from "../utils.js";
+import {showNotification} from "../../utils.js";
 
 export class AlbumSelectController extends ControllerBase {
     #albumSelectView = new AlbumSelectView();

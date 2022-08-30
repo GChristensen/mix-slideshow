@@ -1,7 +1,7 @@
 import {settings} from "../settings.js";
-import {AlbumSelectController} from "./controller_album_select.js";
-import {SlideshowController} from "./controller_slideshow.js";
-import {OptionsDialog} from "./dialog_options.js";
+import {AlbumSelectController} from "./core/controller_album_select.js";
+import {SlideshowController} from "./core/controller_slideshow.js";
+import {OptionsDialog} from "./core/dialog_options.js";
 
 let albumSelectController;
 let slideshowController;

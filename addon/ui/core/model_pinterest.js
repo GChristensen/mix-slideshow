@@ -1,4 +1,4 @@
-import {PinterestAPI} from "../api_pinterest.js";
+import {PinterestAPI} from "./api_pinterest.js";
 import {ModelBase} from "./model_base.js";
 
 export class PinterestModel extends ModelBase {
@@ -56,6 +56,7 @@ export class PinterestModel extends ModelBase {
         let boardPins = await this.#pinterestAPI.getPins(albumId);
 
         return boardPins.map(pin => ({
+            id: pin.id,
             url: pin.images?.orig?.url,
             sourceURL: this.#pinterestAPI.getURL(`/pin/${pin.id}`)
         }));

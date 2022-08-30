@@ -32,5 +32,10 @@
     "scripts": ["global.js", "background.js"]
   },
 
-  "permissions": ["<all_urls>", "tabs", "storage", "notifications", "webRequest", "webRequestBlocking"]
+  "options_ui": {
+    "page": "ui/options.html",
+    "browser_style": true
+  },
+
+  "permissions": ["<all_urls>", "tabs", "storage", "unlimitedStorage", "notifications", "webRequest", "webRequestBlocking"]
 }

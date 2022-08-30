@@ -1,6 +1,6 @@
 import {ControllerBase} from "./controller_base.js";
 import {SlideshowView} from "./view_slideshow.js";
-import {shuffle} from "../utils.js";
+import {shuffle} from "../../utils.js";
 
 export class SlideshowController extends ControllerBase {
     onSlideshowFinished;

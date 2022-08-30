@@ -1,11 +1,12 @@
-import {settings} from "../settings.js";
-import {showNotification} from "../utils.js";
+import {settings} from "../../settings.js";
+import {showNotification} from "../../utils.js";
 
 export class ModelBase {
+    static CACHED_ALBUM_PREFIX = "cached-album";
     static MODEL_ERROR = "EMixSlideshowModelError";
 
     #getCachedAlbumID(album) {
-        return `cached-album-${this.modelID}-${album.id}`;
+        return `${ModelBase.CACHED_ALBUM_PREFIX}-${this.modelID}-${album.id}`;
     }
 
     async _getCachedAlbumImages(album) {
