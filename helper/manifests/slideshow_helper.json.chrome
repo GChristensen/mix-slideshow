@@ -1,0 +1,7 @@
+{
+"name": "slideshow_helper",
+"description": "Mix Slideshow helper application",
+"path": "$EXECUTABLE_PATH$",
+"type": "stdio",
+"allowed_origins": []
+}

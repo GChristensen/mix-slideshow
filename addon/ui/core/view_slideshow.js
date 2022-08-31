@@ -100,20 +100,21 @@ export class SlideshowView {
         $("#slideshow-container")[0].requestFullscreen();
     }
 
-    async renderImage(imageURL) {
+    async renderImage(image) {
         if (this.#options.crossfade)
-            return this.#renderImageCrossfading(imageURL);
+            return this.#renderImageCrossfading(image);
         else
-            return this.#renderImagePlain(imageURL);
+            return this.#renderImagePlain(image);
     }
 
     #renderImagePlain(imageURL) {
         const image = $(`#slideshow-image-0`);
-        image.prop("src", imageURL);
+        image.prop("title", image.sourceURL);
+        image.prop("src", image.url);
         image.parent().show();
     }
 
-    async #renderImageCrossfading(imageURL) {
+    async #renderImageCrossfading(image) {
         const currentImageId = `#slideshow-image-${this.#displayCounter % 2}`;
         const previousImageId = `#slideshow-image-${(this.#displayCounter + 1) % 2}`;
         const currentImage = $(currentImageId).parent();
@@ -122,7 +123,7 @@ export class SlideshowView {
         this.#displayCounter += 1;
 
         try {
-            await this.#loadImage(currentImageId, imageURL);
+            await this.#loadImage(currentImageId, image.url);
         } catch (e) {
             console.error(e);
         }
@@ -130,6 +131,7 @@ export class SlideshowView {
         this.#inTransition = true;
         currentImage.css("z-index", "100");
         previousImage.css("z-index", "99");
+        currentImage.prop("title", image.sourceURL);
 
         previousImage.fadeOut(CROSSFADE_DURATION_MS);
         currentImage.fadeIn(CROSSFADE_DURATION_MS, () => {

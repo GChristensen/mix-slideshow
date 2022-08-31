@@ -94,8 +94,8 @@ export class SlideshowController extends ControllerBase {
         if (this.#currentImage < 0)
             this.#currentImage = this.#images.length - 1;
 
-        const imageURL = this.#images[this.#currentImage].url;
-        this.#slideshowView.renderImage(imageURL);
+        const image = this.#images[this.#currentImage];
+        this.#slideshowView.renderImage(image);
     }
 
     pauseSlideshow() {

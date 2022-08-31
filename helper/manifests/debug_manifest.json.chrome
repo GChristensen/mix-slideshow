@@ -1,0 +1,7 @@
+{
+"name": "slideshow_helper",
+"description": "Mix Slideshow helper application",
+"path": "D:\\sandbox\\firefox\\slideshow\\helper\\slideshow_helper.cmd",
+"type": "stdio",
+"allowed_origins": []
+}

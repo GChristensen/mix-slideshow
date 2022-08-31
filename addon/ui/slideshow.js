@@ -2,6 +2,7 @@ import {settings} from "../settings.js";
 import {AlbumSelectController} from "./core/controller_album_select.js";
 import {SlideshowController} from "./core/controller_slideshow.js";
 import {OptionsDialog} from "./core/dialog_options.js";
+import {helperApp} from "../helper_app.js";
 
 let albumSelectController;
 let slideshowController;
@@ -23,6 +24,8 @@ async function init() {
 
     albumSelectController.listAlbums();
     slideshowController.onSlideshowFinished = onSlideshowFinished;
+
+    await helperApp.probe();
 }
 
 async function startSlideshow() {

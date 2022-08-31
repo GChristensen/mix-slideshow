@@ -37,5 +37,5 @@
     "browser_style": true
   },
 
-  "permissions": ["<all_urls>", "tabs", "storage", "unlimitedStorage", "notifications", "webRequest", "webRequestBlocking"]
+  "permissions": ["<all_urls>", "tabs", "storage", "unlimitedStorage", "notifications", "nativeMessaging", "webRequest", "webRequestBlocking"]
 }

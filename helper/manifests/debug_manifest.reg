@@ -1,0 +1,7 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CURRENT_USER\Software\Mozilla\NativeMessagingHosts\slideshow_helper]
+@="D:\\sandbox\\firefox\\slideshow\\helper\\manifests\\debug_manifest.json"
+
+[HKEY_CURRENT_USER\SOFTWARE\Google\Chrome\NativeMessagingHosts\slideshow_helper]
+@="D:\\sandbox\\firefox\\slideshow\\helper\\manifests\\debug_manifest.json.chrome"
