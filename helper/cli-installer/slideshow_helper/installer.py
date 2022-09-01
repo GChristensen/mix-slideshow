@@ -54,24 +54,15 @@ def write_reg_hkcu_value(path, value):
         print("Can't access registry")
 
 
-dev_install = len(sys.argv) > 1 and sys.argv[1] == "--devel"
-
-helper_base = "ishell_helper"
+helper_base = "slideshow_helper"
 
 package_path = os.path.abspath(os.path.dirname(__file__))
+subprocess.check_call([sys.executable, "-m", "pip", "install", package_path, "--user"])
 
-if dev_install:
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "flask"])
-else:
-    subprocess.check_call([sys.executable, "-m", "pip", "install", package_path, "--user"])
+executable_base_path = site.getuserbase() + f"/bin/{helper_base}"
 
-if dev_install:
-    executable_base_path = f"{package_path}/{helper_base}"
-    os.mkdir(f"{package_path}/../.local")
-else:
-    executable_base_path = site.getuserbase() + f"/bin/{helper_base}"
-    if platform.system() == "Windows":
-        executable_base_path = os.path.dirname(site.getusersitepackages()) + f"\\Scripts\\{helper_base}"
+if platform.system() == "Windows":
+    executable_base_path = os.path.dirname(site.getusersitepackages()) + f"\\Scripts\\{helper_base}"
 
 executable_path = get_binary_path(executable_base_path)
 

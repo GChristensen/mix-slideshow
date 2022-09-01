@@ -142,10 +142,14 @@ export class SlideshowController extends ControllerBase {
         this.advanceSlideshow(false);
     }
 
-    #onSlideshowClick() {
+    async #onSlideshowClick() {
         if (this.slideshowRunning) {
             const image = this.#images[this.#currentImage];
-            browser.tabs.create({url: image.sourceURL, active: true});
+
+            if (image.localPath)
+                return fetch(image.sourceURL);
+            else
+                return browser.tabs.create({url: image.sourceURL, active: true});
         }
     }
 

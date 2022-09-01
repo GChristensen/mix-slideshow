@@ -1,0 +1,43 @@
+#folders {
+    width: 100%;
+}
+
+.folder-path, .folder-path div {
+    width: 100%;
+}
+
+.folder-path div {
+    display: flex;
+}
+
+.path-text {
+    flex: 1 0 auto;
+}
+
+.folder-title, .folder-path, .folder-threshold {
+    padding: 5px;
+}
+
+.folder-controls {
+    padding-left: 5px;
+}
+
+.title-text {
+    width: 150px;
+}
+
+.folder-remove, .folder-add {
+    cursor: pointer;
+}
+
+#after-folders {
+    width: 100%;
+    text-align: right;
+    margin-top: 10px;
+    padding-top: 5px;
+    border-top: 1px solid black;
+}
+
+#import-settings-file-picker {
+    display: none;
+}

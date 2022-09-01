@@ -2,15 +2,8 @@
 <html>
   <head>
     <meta charset="utf-8"/>
-    <style>
-      #client-container {
-        display: flex;
-      }
 
-      .spacer {
-        flex: 1 0 auto;
-      }
-    </style>
+    <link href="options.css" rel="stylesheet"/>
 
     <script src="../global.js" type="text/javascript"></script>
     <script src="../lib/jquery.js" type="text/javascript"></script>
@@ -18,25 +11,31 @@
   </head>
 
   <body>
-    <!--table style="width: 100%">
-      <tr>
-        <td style="width: 20%"><label>Torrent folders</label></td>
-        <td><input type="text" id="folders" style="width: 100%"/></td>
-      </tr>
-      <tr>
-        <td style="width: 20%"><label>Web API URL</label></td>
-        <td><input type="text" id="host" style="width: 100%"
-                   placeholder="For example: http://localhost:8080/gui/"/></td>
-      </tr>
-      <tr>
-        <td style="width: 20%"><label>Web API user name</label></td>
-        <td><input type="text" id="user" style="width: 100%"/></td>
-      </tr>
-      <tr>
-        <td style="width: 20%"><label>Web API password</label></td>
-        <td><input type="password" id="password" style="width: 100%"/></td>
-      </tr>
-    </table-->
+
+  <h3>Local Folders</h3>
+  <table id="folders"></table>
+
+  <div id="after-folders">
     <a id="clear-album-cache-link" href="#">Clear album cache</a>
+    / <a id="export-settings" href="#">Export settings</a>
+    / <a id="import-settings" href="#">Import settings</a>
+    <input type="file" id="import-settings-file-picker"/>
+  </div>
+
+    <template id="folder-row-template">
+      <tr class="folder">
+        <td class="folder-title">
+          <input type="text" class="title-text" placeholder="Title" value=""/>
+          <input type="hidden" class="album-id" value=""/>
+        </td>
+        <td class="folder-path"><div><input type="text" class="path-text" placeholder="Path" value=""/></div></td>
+        <td class="folder-path"><input type="checkbox" class="recursive-check" title="Scan subfolders"/></td>
+        <td class="folder-controls"><!--
+                -->&nbsp;<span class="folder-remove" title="Remove">&#x2716;</span><!--
+                -->&nbsp;<span class="folder-add" title="Add New Folder">&#x271A;</span><!--
+            --></td>
+      </tr>
+    </template>
+
   </body>
 </html>

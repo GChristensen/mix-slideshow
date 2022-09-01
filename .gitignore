@@ -4,3 +4,5 @@
 /addon/.web-extension-id
 /.local
 __pycache__
+/helper/*.exe
+/helper/*.tgz

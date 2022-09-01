@@ -1,9 +1,9 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='ishell_helper',
+    name='slideshow_helper',
     version='0.1',
-    packages=['ishell'],
+    packages=['slideshow'],
     url='',
     license='',
     author='gchristnsn',
@@ -11,6 +11,6 @@ setup(
     description='',
     install_requires=['Flask'],
     entry_points = {
-        'console_scripts': ['ishell_helper=ishell.helper:main'],
+        'console_scripts': ['slideshow_helper=slideshow.helper:main'],
     }
 )

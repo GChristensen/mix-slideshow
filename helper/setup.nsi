@@ -1,6 +1,6 @@
 Unicode True
 
-!define APPNAME "iShell Helper"
+!define APPNAME "Mix Slideshow Helper"
 !define VERSION "0.1"
 
 !define APPNAMEANDVERSION "${APPNAME} ${VERSION}"
@@ -9,7 +9,7 @@ Unicode True
 Name "${APPNAMEANDVERSION}"
 InstallDir "$PROGRAMFILES\${APPNAME}"
 InstallDirRegKey HKLM "Software\${APPNAME}" ""
-OutFile "ishell-helper-${VERSION}_x86_64.exe"
+OutFile "slideshow-helper-${VERSION}_x86_64.exe"
 
 ; Use compression
 SetCompressor LZMA
@@ -17,16 +17,16 @@ SetCompressor LZMA
 ; Modern interface settings
 !include "MUI.nsh"
 
-!define MUI_ICON ".\assets\ishell.ico"
-!define MUI_UNICON ".\assets\ishell.ico"
+!define MUI_ICON ".\assets\slideshow.ico"
+!define MUI_UNICON ".\assets\slideshow.ico"
 
 !define MUI_HEADERIMAGE
 
 !define MUI_HEADERIMAGE_BITMAP "${NSISDIR}\Contrib\Graphics\Header\win.bmp"
 !define MUI_HEADERIMAGE_UNBITMAP "${NSISDIR}\Contrib\Graphics\Header\win.bmp"
 
-!define MUI_WELCOMEFINISHPAGE_BITMAP ".\assets\ishell.bmp"
-!define MUI_UNWELCOMEFINISHPAGE_BITMAP ".\assets\ishell.bmp"
+!define MUI_WELCOMEFINISHPAGE_BITMAP ".\assets\slideshow.bmp"
+!define MUI_UNWELCOMEFINISHPAGE_BITMAP ".\assets\slideshow.bmp"
 
 !define MUI_ABORTWARNING
 
@@ -135,7 +135,7 @@ Function UninstallExisting
     Exch $1
 FunctionEnd
 
-Section "iShell Helper" Section1
+Section "Mix Slideshow Helper" Section1
 
     ReadRegStr $0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" "UninstallString"
     ${If} $0 != ""
@@ -152,10 +152,10 @@ Section "iShell Helper" Section1
 
 	; Set Section Files and Shortcuts
 	SetOutPath "$INSTDIR\"
-	File "assets\ishell.ico"
-	File /r "dist/ishell_helper\"
+	File "assets\slideshow.ico"
+	File /r "dist/slideshow_helper\"
 
-	Push '$INSTDIR\ishell_helper.exe'
+	Push '$INSTDIR\slideshow_helper.exe'
     Push "\"
     Push "/"
     Call StrReplace
@@ -163,11 +163,11 @@ Section "iShell Helper" Section1
 
 	FileOpen $0 manifest.json w
 	FileWrite $0 '{$\n'
-    FileWrite $0 '"name": "ishell_helper",$\n'
-    FileWrite $0 '"description": "iShell helper application",$\n'
+    FileWrite $0 '"name": "slideshow_helper",$\n'
+    FileWrite $0 '"description": "Mix Slideshow helper application",$\n'
     FileWrite $0 '"path": "$1",$\n'
     FileWrite $0 '"type": "stdio",$\n'
-    FileWrite $0 '"allowed_extensions": [ "ishell@gchristensen.github.io", "ishell-we@gchristensen.github.io" ]$\n'
+    FileWrite $0 '"allowed_extensions": [ "mix-slideshow@gchristensen.github.io" ]$\n'
     FileWrite $0 '}$\n'
     FileClose $0
 
@@ -175,12 +175,12 @@ SectionEnd
 
 Section -FinishSection
 
-    WriteRegStr HKCU "Software\Mozilla\NativeMessagingHosts\ishell_helper" "" "$INSTDIR\manifest.json"
+    WriteRegStr HKCU "Software\Mozilla\NativeMessagingHosts\slideshow_helper" "" "$INSTDIR\manifest.json"
 
 	WriteRegStr HKLM "Software\${APPNAME}" "" "$INSTDIR"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" "DisplayName" "${APPNAME}"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" "UninstallString" "$INSTDIR\uninstall.exe"
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" "DisplayIcon" "$INSTDIR\ishell.ico"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" "DisplayIcon" "$INSTDIR\slideshow.ico"
 	WriteUninstaller "$INSTDIR\uninstall.exe"
 
     CreateDirectory "$SMPROGRAMS\${APPNAME}"
@@ -196,7 +196,7 @@ SectionEnd
 Section Uninstall
 
 	;Remove from registry...
-	DeleteRegKey HKCU "Software\Mozilla\NativeMessagingHosts\ishell_helper"
+	DeleteRegKey HKCU "Software\Mozilla\NativeMessagingHosts\slideshow_helper"
 	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}"
 	DeleteRegKey HKLM "SOFTWARE\${APPNAME}"
 
@@ -219,6 +219,6 @@ Function .onInit
 
 FunctionEnd
 
-BrandingText "iShell Helper"
+BrandingText "Mix Slideshow Helper"
 
 ; eof

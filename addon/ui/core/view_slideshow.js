@@ -120,6 +120,8 @@ export class SlideshowView {
         const currentImage = $(currentImageId).parent();
         const previousImage = $(previousImageId).parent();
 
+        this.#inTransition = true;
+
         this.#displayCounter += 1;
 
         try {
@@ -128,10 +130,9 @@ export class SlideshowView {
             console.error(e);
         }
 
-        this.#inTransition = true;
         currentImage.css("z-index", "100");
         previousImage.css("z-index", "99");
-        currentImage.prop("title", image.sourceURL);
+        currentImage.prop("title", image.localPath || image.sourceURL);
 
         previousImage.fadeOut(CROSSFADE_DURATION_MS);
         currentImage.fadeIn(CROSSFADE_DURATION_MS, () => {

@@ -15,16 +15,12 @@ export class PinterestModel extends ModelBase {
         });
     }
 
-    get name() {
-        return "Pinterest";
+    get authorizationText() {
+        return "Authorize";
     }
 
     get modelID() {
         return PinterestModel.ID;
-    }
-
-    get authorizationURL() {
-        return "https://pinterest.com";
     }
 
     get isAuthorized() {
@@ -33,7 +29,7 @@ export class PinterestModel extends ModelBase {
 
     async authorize() {
         if (!this.#pinterestAPI.isAuthorized)
-            await browser.tabs.create({url: this.authorizationURL, active: true});
+            await browser.tabs.create({url: "https://pinterest.com", active: true});
     }
 
     async getAlbums() {
@@ -52,8 +48,8 @@ export class PinterestModel extends ModelBase {
         return result;
     }
 
-    async _getAlbumImages(albumId) {
-        let boardPins = await this.#pinterestAPI.getPins(albumId);
+    async _getAlbumImages(album) {
+        let boardPins = await this.#pinterestAPI.getPins(album.id);
 
         return boardPins.map(pin => ({
             id: pin.id,

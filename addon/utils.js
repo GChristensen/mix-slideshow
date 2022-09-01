@@ -38,6 +38,24 @@ export function shuffle(array) {
     return array;
 }
 
+export async function sha1(text) {
+    const bytes = new TextEncoder().encode(text);
+    const digest = await crypto.subtle.digest("SHA-1", bytes);
+
+    return hexString(digest);
+}
+
+function hexString(buffer) {
+    const byteArray = new Uint8Array(buffer);
+
+    const hexCodes = [...byteArray].map(value => {
+        const hexCode = value.toString(16);
+        return hexCode.padStart(2, '0');
+    });
+
+    return hexCodes.join('');
+}
+
 export async function fetchText(url, init) {
     const response = await fetch(url, init);
     if (response.ok)

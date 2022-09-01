@@ -12,7 +12,7 @@ import flask
 from flask import request, abort
 from werkzeug.serving import make_server
 
-# !!!!!!vvvv
+# !!!!!!vvvvv
 DEBUG = False
 
 app = flask.Flask(__name__)
@@ -29,6 +29,7 @@ if DEBUG:
 
 auth_token = None
 host = "localhost"
+http_port = None
 httpd = None
 
 message_mutex = threading.Lock()
@@ -51,17 +52,18 @@ class Httpd(threading.Thread):
 
 def start(options):
     global httpd
+    global http_port
     global auth_token
-    port = options["port"]
+    http_port = options["port"]
     auth_token = options["auth"]
 
     try:
-        wait_for_port(port)
+        wait_for_port(http_port)
     except Exception as e:
         logging.debug(e)
 
     daemon = not options.get("server", None)
-    httpd = Httpd(app, port, daemon)
+    httpd = Httpd(app, http_port, daemon)
     httpd.start()
 
 
@@ -78,6 +80,10 @@ def port_available(port):
             return False
         else:
             return True
+
+
+def get_server_port():
+    return http_port
 
         
 def wait_for_port(port): 

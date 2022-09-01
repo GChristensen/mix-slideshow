@@ -1,6 +1,6 @@
 import {merge} from "./utils.js";
 
-const SETTINGS_KEY = "settings";
+export const SETTINGS_KEY = "settings";
 
 class Settings {
     constructor() {

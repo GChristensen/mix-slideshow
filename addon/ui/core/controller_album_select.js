@@ -47,7 +47,7 @@ export class AlbumSelectController extends ControllerBase {
             this.#albumSelectView.renderAlbums(sourceAlbums, selectedAlbums);
         }
         else
-            this.#albumSelectView.renderAuthorizationLink(this.#model.name, "#");
+            this.#albumSelectView.renderAuthorizationLink(this.#model.authorizationText, "#");
     }
 
     async #onSourceChanged() {

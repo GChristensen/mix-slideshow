@@ -1,20 +1,20 @@
 import {settings} from "../../settings.js";
 import {PinterestModel} from "./model_pinterest.js";
-import {OneDriveModel} from "./model_onedrive.js";
+import {LocalFoldersModel} from "./model_local_folders.js";
 
 export class ControllerBase {
     _sources;
 
     constructor() {
-        this._sources = [PinterestModel.ID];
+        this._sources = [PinterestModel.ID, LocalFoldersModel.ID];
     }
 
     async createModel(sourceId) {
         switch (sourceId) {
             case PinterestModel.ID:
                 return new PinterestModel();
-            case OneDriveModel.ID:
-                return new OneDriveModel();
+            case LocalFoldersModel.ID:
+                return new LocalFoldersModel();
         }
     }
 
