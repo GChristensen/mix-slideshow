@@ -100,9 +100,13 @@ a, a:visited, a:active {
     text-align: center;
 }
 
-#label-source, #source-authorization {
+#label-source, #source-authorization, #label-preset, #save-preset-link, #delete-preset-link {
     font-size: 10pt;
 }
+
+/*#preset-links {*/
+/*    text-align: right;*/
+/*}*/
 
 #album-selector {
     margin-top: 4px;
@@ -111,7 +115,7 @@ a, a:visited, a:active {
     flex-direction: column;
 }
 
-#source-selector {
+#source-selector, #preset-selector {
     flex: 0 1 auto;
     margin: 4px 4px;
 }

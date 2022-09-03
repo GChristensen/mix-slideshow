@@ -22,10 +22,7 @@ async function init() {
 
     document.addEventListener('keydown', onKeyDown, false);
 
-    albumSelectController.listAlbums();
     slideshowController.onSlideshowFinished = onSlideshowFinished;
-
-    await helperApp.probe();
 }
 
 async function startSlideshow() {

@@ -29,11 +29,6 @@ export class ModelBase {
         }
     }
 
-    _sortAlbumsByName(albums) {
-        const byNameInsensitive = (a, b) => a.name.localeCompare(b.name, undefined, {sensitivity: "base"});
-        albums.sort(byNameInsensitive);
-    }
-
     async getImages(albums) {
         let images = [];
 

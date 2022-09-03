@@ -107,11 +107,11 @@ export class SlideshowView {
             return this.#renderImagePlain(image);
     }
 
-    #renderImagePlain(imageURL) {
-        const image = $(`#slideshow-image-0`);
-        image.prop("title", image.sourceURL);
-        image.prop("src", image.url);
-        image.parent().show();
+    #renderImagePlain(image) {
+        const imageElement = $(`#slideshow-image-0`);
+        imageElement.prop("title", image.localPath || image.sourceURL);
+        imageElement.prop("src", image.url);
+        imageElement.parent().show();
     }
 
     async #renderImageCrossfading(image) {

@@ -1,6 +1,7 @@
 import {ModelBase} from "./model_base.js";
 import {settings} from "../../settings.js";
 import {helperApp} from "../../helper_app.js";
+import {sortByName} from "../../utils.js";
 
 export class LocalFoldersModel extends ModelBase {
     static ID = "local-folders";
@@ -11,7 +12,7 @@ export class LocalFoldersModel extends ModelBase {
         super();
 
         return helperApp.probe().then(helperApp => {
-            this.#authorized = helperApp;
+            this.#authorized = !!helperApp;
             return this;
         });
     }
@@ -34,8 +35,9 @@ export class LocalFoldersModel extends ModelBase {
 
     async getAlbums() {
         await settings.load();
-        const albums = [...settings.local_folders()];
-        this._sortAlbumsByName(albums);
+        const localFolders = settings.local_folders() || [];
+        const albums = [...localFolders];
+        sortByName(albums);
 
         return albums;
     }

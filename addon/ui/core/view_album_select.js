@@ -1,6 +1,10 @@
 import {settings} from "../../settings.js";
+import {sortByName} from "../../utils.js";
 
 export class AlbumSelectView {
+    onPresetChanged;
+    onPresetSave;
+    onPresetDelete;
     onSourceChanged;
     onAlbumSelected;
     onSourceAuthorization;
@@ -15,7 +19,42 @@ export class AlbumSelectView {
         if (selectedSourceId)
             $(`#source-selector option[value='${selectedSourceId}']`).prop("selected", true);
 
-        $("#source-selector").on("change", this.#onSourceChanged.bind(this));
+        const sourceSelect = $("#source");
+        sourceSelect.on("change", this.#onSourceChanged.bind(this));
+
+        const presetSelect = $("#preset");
+        presetSelect.css("min-width", sourceSelect.outerWidth() + "px");
+        presetSelect.on("change", this.#onPresetChanged.bind(this));
+
+        $("#save-preset-link").on("click", this.#onPresetSave.bind(this));
+        $("#delete-preset-link").on("click", this.#onPresetDelete.bind(this));
+    }
+
+    renderPresets(presets, selectedPreset) {
+        presets = [...presets];
+        sortByName(presets);
+
+        const presetSelect = $("#preset");
+
+        presetSelect.empty();
+
+        for (const preset of presets) {
+            const presetOption = `<option value="${preset.name}">${preset.name}</option>`;
+
+            $(presetOption).appendTo(presetSelect);
+        }
+
+        if (selectedPreset)
+            $(`#preset option[value='${selectedPreset}']`).prop("selected", true);
+        else
+            presetSelect.prop("selectedIndex", -1);
+    }
+
+    selectAlbums(selectedAlbums) {
+        $("#albums input[type='checkbox']").prop("checked", false);
+
+        for (const albumId of selectedAlbums)
+            $(`#albums input[value='${albumId}']`).prop("checked", true);
     }
 
     getSelectedSource() {
@@ -83,6 +122,35 @@ export class AlbumSelectView {
                 </div>`;
 
             $(albumCheck).appendTo(container);
+        }
+    }
+
+    async #onPresetChanged(e) {
+        const sourceId = e.target.value;
+
+        if (this.onPresetChanged)
+            this.onPresetChanged(sourceId);
+    }
+
+    async #onPresetSave(e) {
+        e.preventDefault();
+
+        const presetName = prompt("Name: ");
+
+        if (presetName && this.onPresetSave) {
+            this.onPresetSave(presetName);
+        }
+    }
+
+    async #onPresetDelete(e) {
+        e.preventDefault();
+
+        const presetName = $("#preset").val();
+        const confirmed = confirm("Do you really want to delete the selected preset?");
+
+        if (presetName && confirmed && this.onPresetDelete) {
+            $(`#preset option[value='${presetName}']`).remove();
+            this.onPresetDelete(presetName);
         }
     }
 

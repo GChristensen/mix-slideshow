@@ -82,3 +82,8 @@ export async function fetchWithTimeout(resource, options = {}) {
 
     return response;
 }
+
+export function sortByName(items) {
+    const byNameInsensitive = (a, b) => a.name.localeCompare(b.name, undefined, {sensitivity: "base"});
+    items.sort(byNameInsensitive);
+}
