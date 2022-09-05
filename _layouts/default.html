@@ -43,63 +43,7 @@
         {% endif %}
     </header>
     <section>
-
         {{ content }}
-
-        <h1 id="add-torrent">Mix Slideshow</h1>
-
-        <p><img height="16px" width="16px" src="/images/firefox.png" alt="Firefox" />
-            <a id="xpi-link" href="">Firefox Add-On</a>
-            <!-- :: <img height="16px" width="16px" src="/chrome.png" alt="Chrome" />
-            <a href="https://chrome.google.com/webstore/detail/add-torrent/ebigbooofepkiinneomglffcehbmjdel" target="_blank">Chrome Extension</a> -->
-        </p>
-
-        <script>
-            // var xhr = new XMLHttpRequest();
-            // xhr.onreadystatechange = function() {
-            //     if (this.readyState == 4 && this.status == 200) {
-            //         var release = JSON.parse(this.responseText);
-            //         var link = document.getElementById("xpi-link");
-            //         link.href = release.assets[0].browser_download_url;
-            //     }
-            // };
-            // xhr.open('GET', 'https://api.github.com/repos/gchristensen/torrent-add/releases/latest');
-            // xhr.send();
-            //
-            // function watch() {
-            //     document.getElementById('placeholder').style.display='none';
-            //     document.getElementById('webm').style.display='block';
-            //     var video = document.querySelector('#webm video');
-            //     video.play();
-            //     setTimeout(function () {
-            //         document.getElementById('webm').style.display = 'none';
-            //         document.getElementById('placeholder').style.display = 'block';
-            //     }, 5000);
-            // }
-            //
-            // setTimeout(function() {
-            //     if (navigator.userAgent.search("Chrome") >= 0
-            //         || navigator.userAgent.search("Firefox") >= 0) {
-            //
-            //         watch();
-            //     }
-            // }, 1000);
-
-        </script>
-
-        <div id="placeholder" style="display: block;">
-            <div style="position: relative; display: table;"> <!--  onclick="watch()" -->
-                <!--img title="Watch on Youtube" style="cursor: pointer;" src="/enso-portable/screen.jpg" alt="screen" /-->
-                <img style="cursor: pointer;" src="media/screen.png" alt="screen"/>
-            </div>
-        </div>
-
-        <br>
-
-        <h4>Description</h4>
-
-        <p style="text-align: justify;"></p>
-
     </section>
     <footer>
     </footer>
