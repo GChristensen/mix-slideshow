@@ -2,4 +2,5 @@
 *.iml
 /.local/
 /addon/
+/helper/
 /build/
