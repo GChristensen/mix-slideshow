@@ -14,36 +14,6 @@ layout: default
     </p>
 
     <script>
-        // var xhr = new XMLHttpRequest();
-        // xhr.onreadystatechange = function() {
-        //     if (this.readyState == 4 && this.status == 200) {
-        //         var release = JSON.parse(this.responseText);
-        //         var link = document.getElementById("xpi-link");
-        //         link.href = release.assets[0].browser_download_url;
-        //     }
-        // };
-        // xhr.open('GET', 'https://api.github.com/repos/gchristensen/torrent-add/releases/latest');
-        // xhr.send();
-        //
-        // function watch() {
-        //     document.getElementById('placeholder').style.display='none';
-        //     document.getElementById('webm').style.display='block';
-        //     var video = document.querySelector('#webm video');
-        //     video.play();
-        //     setTimeout(function () {
-        //         document.getElementById('webm').style.display = 'none';
-        //         document.getElementById('placeholder').style.display = 'block';
-        //     }, 5000);
-        // }
-        //
-        // setTimeout(function() {
-        //     if (navigator.userAgent.search("Chrome") >= 0
-        //         || navigator.userAgent.search("Firefox") >= 0) {
-        //
-        //         watch();
-        //     }
-        // }, 1000);
-
         getLatestGHRelease("mix-slideshow", function (release) {
             setDownloadLink(release, "xpi-link", ".xpi");
             setDownloadLink(release, "exe-link", ".exe");
@@ -61,9 +31,9 @@ layout: default
 
     <h4>Description</h4>
 
-    <p style="text-align: justify;">This browser add-on allows mixing images from different sources in a single
+    <p class="just">This browser add-on allows mixing images from different sources in a single
         slideshow. Currently, supported sources are: <a href="https://pinterest.com" target="_blank">Pinterest</a>
-        boards and local folders (via the helper application). The addon is experimental, please report bugs
+        boards and local folders (via the helper application). The addon is experimental. Please report bugs
         <a href="https://github.com/GChristensen/mix-slideshow/issues" target="_blank">here</a>.
     </p>
 
