@@ -17,7 +17,7 @@ function setDownloadLink(release, elementId, ext) {
     var asset;
 
     for (var i = 0; i < release.assets.length; ++i)
-        if (release.assets[i].indexOf(ext) >= 0) {
+        if (release.assets[i].name.indexOf(ext) >= 0) {
             asset = release.assets[i];
             break;
         }
