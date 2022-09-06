@@ -9,9 +9,9 @@ layout: default
 <body>
     <h1 id="add-torrent">Mix Slideshow</h1>
 
-    <!--p><img height="16px" width="16px" src="/images/firefox.png" alt="Firefox" />
-        <a id="xpi-link" href="">Firefox Add-On</a>
-    </p-->
+    <p><img height="16px" width="16px" src="/images/firefox.png" alt="Firefox" />
+        <a id="xpi-link" href="#">Firefox Add-On</a>
+    </p>
 
     <script>
         // var xhr = new XMLHttpRequest();
@@ -44,6 +44,11 @@ layout: default
         //     }
         // }, 1000);
 
+        getLatestGHRelease("mix-slideshow", function (release) {
+            setDownloadLink(release, "xpi-link", ".xpi");
+            setDownloadLink(release, "exe-link", ".exe");
+            setDownloadLink(release, "tgz-link", ".tgz");
+        });
     </script>
 
     <div id="placeholder" style="display: block;">
@@ -58,17 +63,15 @@ layout: default
 
     <p style="text-align: justify;">This browser add-on allows mixing images from different sources in a single
         slideshow. Currently, supported sources are: <a href="https://pinterest.com" target="_blank">Pinterest</a>
-        boards and local folders (via the helper application). The addon is experimental and
-        is not listed in the official browser extension stores. Sometimes its use may trigger
-        local rate limiting on Pinterest (a kind of temporary ban). Please report bugs
+        boards and local folders (via the helper application). The addon is experimental,
+        sometimes its use may trigger local rate limiting on Pinterest. Please report bugs
         <a href="https://github.com/GChristensen/mix-slideshow/issues" target="_blank">here</a>.
     </p>
 
     <h4>Downloads</h4>
     <ul>
-        <li><a href="#">Firefox Add-On</a></li>
-        <li><a href="#">Helper application for Windows</a></li>
-        <li><a href="#">Helper application for Linux and Mac</a></li>
+        <li><a id="exe-link" href="#">Helper application for Windows</a></li>
+        <li><a id="tgz-link" href="#">Helper application for Linux and Mac</a></li>
     </ul>
 </body>
 </html>
