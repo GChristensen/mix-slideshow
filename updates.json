@@ -1,0 +1,11 @@
+{
+  "addons": {
+    "ubiquitywe@firefox": {
+      "updates": [{
+        "version": "0.1.1",
+        "update_link": "https://github.com/GChristensen/mix-slideshow/releases/download/v0.1/mix-slideshow.xpi"
+      }
+      ]
+    }
+  }
+}
