@@ -15,9 +15,9 @@ layout: default
 
     <script>
         getLatestGHRelease("mix-slideshow", function (release) {
-            setDownloadLink(release, "xpi-link", ".xpi");
-            setDownloadLink(release, "exe-link", ".exe");
-            setDownloadLink(release, "tgz-link", ".tgz");
+            setDownloadLink(release, ".xpi", "xpi-link");
+            setDownloadLink(release, ".exe", "exe-link");
+            setDownloadLink(release, ".tgz", "tgz-link");
         });
     </script>
 
